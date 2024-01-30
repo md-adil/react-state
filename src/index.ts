@@ -12,9 +12,9 @@ function resolveState<T>(state: State<T>, initial: T) {
 
 export function createState<T>(initial?: T) {
   const listener = new Event();
-  let shared = initial;
+  let prevState = initial;
   function useAnyState() {
-    const [state, setState] = useState<T>(shared);
+    const [state, setState] = useState<T>(prevState);
     useEffect(() => {
       function handler(value: T) {
         setState(value);
@@ -25,15 +25,16 @@ export function createState<T>(initial?: T) {
       };
     }, []);
     function newState(value: State<T>) {
-      shared = resolveState(value, shared);
-      setState(shared);
-      listener.emit("data", shared);
+      prevState = resolveState(value, prevState);
+      setState(prevState);
+      listener.emit("data", prevState);
     }
     return [state, newState] as const;
   }
 
-  useAnyState.dispatch = function dispatch(data: State<T>) {
-    listener.emit("data", resolveState(data, shared));
+  useAnyState.dispatch = function dispatch(state: State<T>) {
+    prevState = resolveState(state, prevState);
+    listener.emit("data", prevState);
   };
 
   useAnyState.onChange = function onChange(callback: (data: T) => void) {
@@ -41,10 +42,9 @@ export function createState<T>(initial?: T) {
   };
 
   useAnyState.getState = function getState() {
-    return shared;
+    return prevState;
   };
 
   useAnyState.listener = listener;
-
   return useAnyState;
 }
