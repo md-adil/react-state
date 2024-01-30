@@ -1,5 +1,14 @@
 import Event from "events";
 import { useEffect, useState } from "react";
+type State<T> = T | ((state: T) => T);
+
+function isCallable(val: unknown): val is CallableFunction {
+  return typeof val === "function";
+}
+
+function resolveState<T>(state: State<T>, initial: T) {
+  return isCallable(state) ? state(initial) : state;
+}
 
 export function createState<T>(initial?: T) {
   const listener = new Event();
@@ -15,16 +24,16 @@ export function createState<T>(initial?: T) {
         listener.off("data", handler);
       };
     }, []);
-    function newState(value: T) {
-      setState(value);
-      shared = value;
-      listener.emit("data", value);
+    function newState(value: State<T>) {
+      shared = resolveState(value, shared);
+      setState(shared);
+      listener.emit("data", shared);
     }
     return [state, newState] as const;
   }
 
-  useAnyState.dispatch = function dispatch(data: T) {
-    listener.emit("data", data);
+  useAnyState.dispatch = function dispatch(data: State<T>) {
+    listener.emit("data", resolveState(data, shared));
   };
 
   useAnyState.onChange = function onChange(callback: (data: T) => void) {
