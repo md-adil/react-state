@@ -1,9 +1,9 @@
 import { type PersistentEngine } from "./index.js";
 
 function isSupported() {
-  var test = "test";
+  const test = "$$3e2r342";
   try {
-    localStorage.setItem(test, test);
+    localStorage.setItem(test, "1");
     localStorage.removeItem(test);
     return true;
   } catch (e) {

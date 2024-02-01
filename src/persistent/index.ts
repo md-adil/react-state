@@ -11,9 +11,9 @@ export function createPersistent<T>(
     engine!.set(val);
     return val;
   }
-  return function doPersist(initial, onChange, listener) {
+  return function doPersist(initial, onChange) {
     if (!engine) return initial;
     onChange(handleSave);
-    return initial;
+    return engine.get() ?? initial;
   };
 }
