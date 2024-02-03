@@ -46,6 +46,7 @@ export function createState<T>(initial: T, ...middlewares: Middleware<T>[]) {
 
   useAnyState.onChange = function onChange(callback: Callback<T>) {
     listener.on("state", callback);
+    return () => listener.off("state", callback);
   };
 
   useAnyState.getState = function getState() {
