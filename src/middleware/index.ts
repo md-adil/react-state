@@ -1,4 +1,4 @@
-import { type Listener } from "../state.js";
+import type { EventEmitter as Listener } from "events";
 
 type Callback<T> = (state: T) => T;
 type OnChange<T> = (callback: Callback<T>) => void;
@@ -6,13 +6,13 @@ type OnChange<T> = (callback: Callback<T>) => void;
 export type Middleware<T> = (
   initial: T,
   onChange: OnChange<T>,
-  listener: Listener<T>
+  listener: Listener
 ) => T;
 
 export function apply<T>(
   initial: T,
   middlewares: Middleware<T>[],
-  listener: Listener<T>
+  listener: Listener
 ) {
   const callbacks: Callback<T>[] = [];
 

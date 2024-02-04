@@ -1,4 +1,4 @@
-import Event from "events";
+import { EventEmitter as Event } from "events";
 import { useEffect, useState } from "react";
 import { apply, type Middleware } from "./middleware/index.js";
 
@@ -6,7 +6,6 @@ export type State<T> = T | ((state: T) => T);
 export type Dispatch<T> = (val: State<T>) => void;
 type Callback<T> = (state: T) => void;
 
-export type Listener<T> = Event;
 function isCallable(val: unknown): val is CallableFunction {
   return typeof val === "function";
 }
@@ -16,7 +15,8 @@ function resolveState<T>(state: State<T>, initial: T) {
 }
 
 export function createState<T>(initial: T, ...middlewares: Middleware<T>[]) {
-  const listener: Listener<T> = new Event();
+  const listener = new Event();
+
   let [prevState, filter] = apply(initial, middlewares, listener);
   function useAnyState(): [T, Dispatch<T>] {
     const [state, setState] = useState<T>(prevState);
@@ -25,8 +25,10 @@ export function createState<T>(initial: T, ...middlewares: Middleware<T>[]) {
         setState(value);
       }
       listener.on("state", handler);
+      listener.emit("mount");
       return () => {
         listener.off("state", handler);
+        listener.emit("unmount");
       };
     }, []);
 

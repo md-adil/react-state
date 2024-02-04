@@ -2,12 +2,14 @@
   "name": "@nebulus/react-state",
   "version": "0.0.1",
   "type": "module",
+  "license": "MIT",
   "packageManager": "yarn@4.1.0",
   "main": "dist/index.js",
   "exports": "./dist/index.js",
   "author": "Adil <adil.sudo@gmail.com>",
+  "description": "A lightweight and flexible shared state management library for React applications",
   "repository": {
-    "type": "github",
+    "type": "git",
     "url": "https://github.com/md-adil/react-state"
   },
   "scripts": {
@@ -16,11 +18,24 @@
     "build": "yarn clean && tsc"
   },
   "peerDependencies": {
-    "react": ">=16.8.0"
+    "react": ">=16.8"
   },
   "devDependencies": {
-    "@types/node": "^20.10.7",
+    "@types/events": "^3",
     "@types/react": "^18.2.47",
     "typescript": "^5.3.3"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "react",
+    "state",
+    "management",
+    "redux",
+    "store"
+  ],
+  "dependencies": {
+    "events": "^3.3.0"
   }
 }

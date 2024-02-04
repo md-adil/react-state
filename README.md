@@ -15,7 +15,7 @@ npm install @nebulus/react-state
 To create a state using `@nebulus/react-state`, you can use the `createState` function. It takes an initial value and optional middleware(s) as parameters. In the example below, we create a `useScore` hook.
 
 ```jsx
-import { createState } from "react-state";
+import { createState } from "@nebulus/react-state";
 
 const useScore = createState(0);
 ```
@@ -50,29 +50,6 @@ export default function HelloPage() {
 }
 ```
 
-### Middleware
-
-Middleware functions allow you to modify or validate the state before it is updated. In the provided example, a `validation` middleware is defined to enforce a value limit for the `useScore` state.
-
-```tsx
-import { createState, type Middleware } from "react-state";
-
-function validation(max: number): Middleware<number> {
-  function handleChange(val: number) {
-    if (val > max) {
-      throw new Error("value limit exceeded");
-    }
-    return val;
-  }
-  return function validate(initial, onChange) {
-    onChange(handleChange);
-    return initial;
-  };
-}
-
-const useScore = createState(0, validation(10));
-```
-
 ### Dispatching State Updates
 
 State updates are done using the `dispatch` function without react component provided by the created state. In the example, a score is incremented every second using `setInterval`:
@@ -103,4 +80,27 @@ const unbind = useScore.onChange((x) => {
   // detach event
   unbind();
 });
+```
+
+### Middleware
+
+Middleware functions allow you to modify or validate the state before it is updated. In the provided example, a `validation` middleware is defined to enforce a value limit for the `useScore` state.
+
+```tsx
+import { createState, type Middleware } from "react-state";
+
+function validation(max: number): Middleware<number> {
+  function handleChange(val: number) {
+    if (val > max) {
+      throw new Error("value limit exceeded");
+    }
+    return val;
+  }
+  return function validate(initial, onChange) {
+    onChange(handleChange);
+    return initial;
+  };
+}
+
+const useScore = createState(0, validation(10));
 ```
