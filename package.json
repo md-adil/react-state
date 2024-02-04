@@ -10,7 +10,7 @@
   "description": "A lightweight and flexible shared state management library for React applications",
   "repository": {
     "type": "git",
-    "url": "https://github.com/md-adil/react-state"
+    "url": "git+https://github.com/md-adil/react-state.git"
   },
   "scripts": {
     "dev": "tsc -w",
