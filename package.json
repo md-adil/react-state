@@ -1,13 +1,22 @@
 {
-  "name": "react-state",
+  "name": "@nebulus/react-state",
   "version": "0.0.1",
   "type": "module",
   "packageManager": "yarn@4.1.0",
   "main": "dist/index.js",
   "exports": "./dist/index.js",
+  "author": "Adil <adil.sudo@gmail.com>",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/md-adil/react-state"
+  },
   "scripts": {
     "dev": "tsc -w",
-    "build": "tsc"
+    "clean": "rm -rf dist",
+    "build": "yarn clean && tsc"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.7",

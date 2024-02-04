@@ -5,6 +5,18 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
+"@nebulus/react-state@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@nebulus/react-state@workspace:."
+  dependencies:
+    "@types/node": "npm:^20.10.7"
+    "@types/react": "npm:^18.2.47"
+    typescript: "npm:^5.3.3"
+  peerDependencies:
+    react: ">=16.8.0"
+  languageName: unknown
+  linkType: soft
+
 "@types/node@npm:^20.10.7":
   version: 20.10.7
   resolution: "@types/node@npm:20.10.7"
@@ -45,16 +57,6 @@ __metadata:
   checksum: 10c0/80c089d6f7e0c5b2bd83cf0539ab41474198579584fa10d86d0cafe0642202343cbc119e076a0b1aece191989477081415d66c9fefbf3c957fc2fc4b7009f248
   languageName: node
   linkType: hard
-
-"react-state@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "react-state@workspace:."
-  dependencies:
-    "@types/node": "npm:^20.10.7"
-    "@types/react": "npm:^18.2.47"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
 
 "typescript@npm:^5.3.3":
   version: 5.3.3
