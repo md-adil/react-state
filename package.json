@@ -1,9 +1,9 @@
 {
   "name": "@nebulus/react-state",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "license": "MIT",
-  "packageManager": "yarn@4.1.0",
+  "packageManager": "yarn@4.6.0",
   "main": "dist/index.js",
   "exports": "./dist/index.js",
   "author": "Adil <adil.sudo@gmail.com>",
@@ -21,9 +21,9 @@
     "react": ">=16.8"
   },
   "devDependencies": {
-    "@types/events": "^3",
-    "@types/react": "^18.2.47",
-    "typescript": "^5.3.3"
+    "@types/events": "^3.0.3",
+    "@types/react": "^19.0.8",
+    "typescript": "^5.7.3"
   },
   "files": [
     "dist"
@@ -36,6 +36,7 @@
     "store"
   ],
   "dependencies": {
-    "events": "^3.3.0"
+    "events": "^3.3.0",
+    "immer": "^10.1.1"
   }
 }

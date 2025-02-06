@@ -1,8 +1,9 @@
 import { EventEmitter as Event } from "events";
 import { useEffect, useState } from "react";
+import { produce } from "immer";
 import { apply, type Middleware } from "./middleware/index.js";
 
-export type State<T> = T | ((state: T) => T);
+export type State<T> = T | ((state: T) => T | void);
 export type Dispatch<T> = (val: State<T>) => void;
 type Callback<T> = (state: T) => void;
 
@@ -11,7 +12,7 @@ function isCallable(val: unknown): val is CallableFunction {
 }
 
 function resolveState<T>(state: State<T>, initial: T) {
-  return isCallable(state) ? state(initial) : state;
+  return isCallable(state) ? produce(initial, state) : state;
 }
 
 export function createState<T>(initial: T, ...middlewares: Middleware<T>[]) {

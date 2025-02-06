@@ -50,6 +50,63 @@ export default function HelloPage() {
 }
 ```
 
+### Mutate state directly
+
+With the help of [immer](https://immerjs.github.io/immer/) you can directly mutate state
+
+```tsx
+import { createState } from "@nebulus/react-state";
+
+interface IPerson {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+export const usePerson = createState<Partial<IPerson>>({});
+
+export function CreatePerson() {
+  const [person, setPerson] = usePerson();
+  return (
+    <div>
+      <p>
+        <input
+          placeholder="Name"
+          value={person.name ?? ""}
+          onChange={(e) =>
+            setPerson((x) => {
+              x.name = e.target.value;
+            })
+          }
+        />
+      </p>
+      <p>
+        <input
+          placeholder="Email"
+          value={person.email ?? ""}
+          onChange={(e) =>
+            setPerson((x) => {
+              x.email = e.target.value;
+            })
+          }
+        />
+      </p>
+      <p>
+        <input
+          placeholder="Phone"
+          value={person.phone ?? ""}
+          onChange={(e) =>
+            setPerson((x) => {
+              x.phone = e.target.value;
+            })
+          }
+        />
+      </p>
+    </div>
+  );
+}
+```
+
 ### Dispatching State Updates
 
 State updates are done using the `dispatch` function without react component provided by the created state. In the example, a score is incremented every second using `setInterval`:
