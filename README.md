@@ -1,58 +1,70 @@
-# React State
+## 🚀 Effortless Shared State Management for React
 
-`@nebulus/react-state` is a lightweight and flexible shared state management library for React applications like `redux`, `zustand` and `recoil` etc. It provides a simple and intuitive API to manage the state of your components, along with middleware support for handling state transformations.
+`@nebulus/react-state` is a simple and powerful state management library that allows multiple React components to share and synchronize state seamlessly—without prop drilling, context providers, or complex setup. It also supports middleware for handling state transformations.
 
-## Installation
+---
+
+With `@nebulus/react-state`, you can:
+
+- 🔄 Share state across multiple components without passing props.
+- ⚡ Update state in real-time with a simple API.
+- 🔍 Access and modify global state from anywhere in your application.
+- 🛠️ Use middleware for advanced state logic and transformations.
+- 🎯 **Efficient re-renders** – Only components using the state hook will update, unlike other libraries that trigger updates across the entire component tree.
+
+---
+
+## 📦 Installation
 
 ```bash
 npm install @nebulus/react-state
 ```
 
-## Getting Started
+---
 
-### Creating State
+## 🎯 Getting Started
 
-To create a state using `@nebulus/react-state`, you can use the `createState` function. It takes an initial value and optional middleware(s) as parameters. In the example below, we create a `useScore` hook.
+### 🔧 Creating Shared State
 
-```jsx
+To create a shared state, use the `createState` function. It takes an initial value and optional middleware(s). This allows multiple components to access and update the same state.
+
+```tsx
 import { createState } from "@nebulus/react-state";
 
-const useScore = createState(0);
+const useScore = createState(0); // Shared state across components
 ```
 
-### Using State in Components
+### 📌 Using Shared State in Components
 
-To use the state within your components, you can destructure the result of the state hook just like react `useState` hook:
+Any component can access and modify the shared state using the hook:
 
-```jsx
+```tsx
 function ViewScore() {
   const [score] = useScore();
-  return <div>{score}</div>;
+  return <div>🏆 Score: {score}</div>;
 }
 
 function UpdateScore() {
   const [, setScore] = useScore();
-  return (
-    <div>
-      <button onClick={() => setScore((x) => x + 1)}>+</button>
-    </div>
-  );
+  return <button onClick={() => setScore((x) => x + 1)}>➕ Increment</button>;
 }
 
-export default function HelloPage() {
+export default function App() {
   return (
     <div>
       <ViewScore />
       <UpdateScore />
-      <h2>Hello world!!!</h2>
+      <h2>🌍 Hello world!!!</h2>
     </div>
   );
 }
 ```
 
-### Mutate state directly
+---
 
-With the help of [immer](https://immerjs.github.io/immer/) you can directly mutate state
+### ✨ Mutating State Directly
+
+With [immer](https://immerjs.github.io/immer/), you can update nested objects safely:
 
 ```tsx
 import { createState } from "@nebulus/react-state";
@@ -69,49 +81,45 @@ export function CreatePerson() {
   const [person, setPerson] = usePerson();
   return (
     <div>
-      <p>
-        <input
-          placeholder="Name"
-          value={person.name ?? ""}
-          onChange={(e) =>
-            setPerson((x) => {
-              x.name = e.target.value;
-            })
-          }
-        />
-      </p>
-      <p>
-        <input
-          placeholder="Email"
-          value={person.email ?? ""}
-          onChange={(e) =>
-            setPerson((x) => {
-              x.email = e.target.value;
-            })
-          }
-        />
-      </p>
-      <p>
-        <input
-          placeholder="Phone"
-          value={person.phone ?? ""}
-          onChange={(e) =>
-            setPerson((x) => {
-              x.phone = e.target.value;
-            })
-          }
-        />
-      </p>
+      <input
+        placeholder="📛 Name"
+        value={person.name ?? ""}
+        onChange={(e) =>
+          setPerson((x) => {
+            x.name = e.target.value;
+          })
+        }
+      />
+      <input
+        placeholder="📧 Email"
+        value={person.email ?? ""}
+        onChange={(e) =>
+          setPerson((x) => {
+            x.email = e.target.value;
+          })
+        }
+      />
+      <input
+        placeholder="📞 Phone"
+        value={person.phone ?? ""}
+        onChange={(e) =>
+          setPerson((x) => {
+            x.phone = e.target.value;
+          })
+        }
+      />
     </div>
   );
 }
 ```
 
-### Dispatching State Updates
+---
 
-State updates are done using the `dispatch` function without react component provided by the created state. In the example, a score is incremented every second using `setInterval`:
+### ⏩ Updating State Outside Components
 
-```jsx
+Use `dispatch` to update shared state without being inside a React component:
+
+```tsx
 setInterval(() => {
   try {
     useScore.dispatch((x) => x + 1);
@@ -119,45 +127,53 @@ setInterval(() => {
 }, 1000);
 ```
 
-### Get state
+---
 
-Getting state using the `getState` function without using react component
+### 🔍 Retrieving State Globally
+
+Access the current state anywhere in your application:
 
 ```tsx
-const state = useScore.getState(); // state will be a number
+const state = useScore.getState(); // Get the latest score
 ```
 
-### Listening on change
+---
 
-Adding Listener
+### 🎧 Listening for State Changes
+
+You can listen to state changes and react to them dynamically:
 
 ```tsx
 const unbind = useScore.onChange((x) => {
-  console.log(`changing score`, x);
-  // detach event
-  unbind();
+  console.log("🔄 Score updated:", x);
+  unbind(); // Remove listener after first update
 });
 ```
 
-### Middleware
+---
 
-Middleware functions allow you to modify or validate the state before it is updated. In the provided example, a `validation` middleware is defined to enforce a value limit for the `useScore` state.
+## 🛠️ Middleware for Enhanced Control
+
+Middleware functions allow modifying or validating state updates before applying them. The example below enforces a maximum score limit:
 
 ```tsx
-import { createState, type Middleware } from "react-state";
+import { createState, type Middleware } from "@nebulus/react-state";
 
 function validation(max: number): Middleware<number> {
-  function handleChange(val: number) {
-    if (val > max) {
-      throw new Error("value limit exceeded");
-    }
-    return val;
-  }
   return function validate(initial, onChange) {
-    onChange(handleChange);
+    onChange((val) => {
+      if (val > max) {
+        throw new Error("🚫 Value limit exceeded");
+      }
+      return val;
+    });
     return initial;
   };
 }
 
 const useScore = createState(0, validation(10));
 ```
+
+---
+
+🔥 **Easily manage and share state across components with `@nebulus/react-state`!**
